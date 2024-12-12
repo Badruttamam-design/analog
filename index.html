@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jam Analog | Digital</title>
+    <link rel="icon" href="kk.png" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Droid+Arabic+Naskh&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="animate/animate.css"/>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="clock-container wow fadeInDown" data-wow-delay="0.1s">
+        <div class="analog-clock">
+            <!-- Angka di sekitar jam -->
+            <div class="number wow zoomIn" data-wow-delay="1s" style="--n:1"><b>1</b></div>
+            <div class="number wow zoomIn" data-wow-delay="1s" style="--n:2"><b>2</b></div>
+            <div class="number wow zoomIn" data-wow-delay="1s" style="--n:3"><b>3</b></div>
+            <div class="number wow zoomIn" data-wow-delay="1s" style="--n:4"><b>4</b></div>
+            <div class="number wow zoomIn" data-wow-delay="1s" style="--n:5"><b>5</b></div>
+            <div class="number wow zoomIn" data-wow-delay="1s" style="--n:6"><b>6</b></div>
+            <div class="number wow zoomIn" data-wow-delay="1s" style="--n:7"><b>7</b></div>
+            <div class="number wow zoomIn" data-wow-delay="1s" style="--n:8"><b>8</b></div>
+            <div class="number wow zoomIn" data-wow-delay="1s" style="--n:9"><b>9</b></div>
+            <div class="number wow zoomIn" data-wow-delay="1s" style="--n:10"><b>10</b></div>
+            <div class="number wow zoomIn" data-wow-delay="1s" style="--n:11"><b>11</b></div>
+            <div class="number wow zoomIn" data-wow-delay="1s" style="--n:12"><b>12</b></div>
+
+            <!-- Jarum jam -->
+            <div class="hand hour-hand wow zoomIn" data-wow-delay="2s"></div>
+            <div class="hand minute-hand wow zoomIn" data-wow-delay="2s"></div>
+            <div class="hand second-hand wow zoomIn" data-wow-delay="2s"></div>
+            <div class="center-dot wow zoomIn" data-wow-delay="2s"></div>
+
+            <!-- Jam Digital -->
+            <div class="digital-clock  wow fadeIn" data-wow-delay="3s" id="digital-clock"></div>
+            <!-- Tanggal, Bulan, dan Tahun -->
+            <div class="date wow fadeIn" data-wow-delay="3s" id="date"></div>
+            <div class="date wow fadeIn" data-wow-delay="3s" id="location"></div>
+            <!-- Running Text for Prayer Time -->
+            <div id="runningText"></div>
+
+            <!-- Next Prayer Countdown -->
+            <div class="prayer wow fadeIn" data-wow-delay="3s" id="nextPrayerText"></div>
+            <audio id="azanAudio" src="adan.mp3" preload="auto"></audio>
+
+        </div>
+    </div>
+    <div class="waktu wow fadeIn" data-wow-delay="3s" id="prayer-times">
+        <div id="left-times">
+            <div id="imsak">IMSAK </div>
+            <div id="subuh">SUBUH </div>
+            <div id="dhuhur">DHUHUR </div>
+        </div>
+        <div id="right-times">
+            <div id="ashar">ASHAR </div>
+            <div id="maghrib">MAGHRIB </div>
+            <div id="isya">ISYA </div>
+        </div>
+    </div>
+
+    
+     <!-- particles -->
+    <div id="particles-js"></div>
+    <div id="countdown"></div>
+    <footer class="footer wow fadeInDown" data-wow-delay="4s">
+        <p>بدر التمام إبن علي</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="particel.js"></script>
+    <script src="wow/wow.js"></script>
+    <script>
+        new WOW().init();
+    </script>
+</body>
+
+</html>

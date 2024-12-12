@@ -1,0 +1,425 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-image: url(t.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+}
+
+.clock-container {
+    position: relative;
+}
+
+.analog-clock {
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle, #056263, #000d1a);
+}
+
+.analog-clock::before {
+    content: "";
+    width: 525px;
+    height: 525px;
+    position: absolute;
+    border-radius: 50%;
+    background: linear-gradient(#00d9ff, #ee00ff, #2f2dca);
+    box-shadow: 0 0 15px 15px rgba(0, 0, 0, 0.2);
+    z-index: -1;
+    animation: rotateClock 2s linear infinite;
+}
+
+@keyframes rotateClock {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#runningText,
+#nextPrayerText {
+    font-size: 25px;
+    font-family: sans-serif;
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    bottom: 100px;
+    color: #00d9ff;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+.hand {
+    position: absolute;
+    background: white;
+    transform-origin: bottom;
+    bottom: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.hour-hand {
+    position: absolute;
+    width: 8px;
+    height: 120px;
+    background: linear-gradient(#00d9ff, #ee00ff);
+    border-radius: 30px 30px 0 0;
+    z-index: 3;
+}
+
+.minute-hand {
+    position: absolute;
+    width: 6px;
+    height: 160px;
+    background: linear-gradient(to top, #00d9ff, #ee00ff);
+    border-radius: 30px 30px 0 0;
+    z-index: 3;
+}
+
+.second-hand {
+    position: absolute;
+    width: 4px;
+    height: 200px;
+    background: linear-gradient(to top, #00d9ff, #ee00ff);
+    border-radius: 30px 30px 0 0;
+    z-index: 3;
+}
+
+.digital-clock {
+    font-size: 40px;
+    font-family: sans-serif;
+    text-align: center;
+    position: absolute;
+    border: 2px solid #00d9ff;
+    background: radial-gradient(#056263, #000d1a);
+    border-radius: 5px;
+    padding: 0 5px;
+    left: 50%;
+    top: 100px;
+    color: #00d9ff;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+.seconds {
+    color: #ee00ff;
+}
+
+.number {
+    transform: rotate(calc(30deg * var(--n)));
+    position: absolute;
+    text-align: center;
+    inset: 10px;
+    font-size: 40px;
+    color: #00d9ff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.number b {
+    transform: rotate(calc(-30deg * var(--n)));
+    display: inline-block;
+}
+
+.center-dot {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background-color: #ee00ff;
+    border: 6px solid #00d9ff;
+    border-radius: 50%;
+    z-index: 3;
+}
+
+.date {
+    font-size: 20px;
+    font-family: sans-serif;
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    top: 160px;
+    color: #00d9ff;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+#location {
+    font-size: 12px;
+    font-family: sans-serif;
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    top: 190px;
+    color: #00d9ff;
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+#particles-js {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+}
+
+#prayer-times {
+    display: flex;
+    justify-content: space-between;
+    font-size: 60px;
+    width: 95%;
+    align-items: center;
+    padding: 0 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    color: hsla(190, 100%, 60%, 0.125); 
+    font-family: sans-serif;
+    gap: 50px;
+    z-index: 1;
+}
+
+#left-times, #right-times {
+    display: flex;
+    flex-direction: column;
+    gap: 25px; 
+}
+
+#left-times {
+    justify-content: flex-start;
+}
+
+#right-times {
+    justify-content: flex-end;
+}
+
+.footer {
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    overflow: hidden; 
+    color: #00d9ff;
+    padding: 10px 0;
+    font-family: 'Droid Arabic Naskh', serif;
+    z-index: 2;
+}
+
+/* Media Queries for Responsiveness */
+@media screen and (max-width: 768px) {
+    .analog-clock {
+        width: 350px;
+        height: 350px;
+    }
+
+    .analog-clock::before {
+        width: 375px;
+        height: 375px;
+    }
+
+    .hour-hand {
+        width: 6px;
+        height: 90px;
+    }
+
+    .minute-hand {
+        width: 5px;
+        height: 120px;
+    }
+
+    .second-hand {
+        width: 2px;
+        height: 150px;
+    }
+
+    .digital-clock {
+        font-size: 25px;
+        top: 75px;
+    }
+
+    .number {
+        font-size: 30px;
+        inset: 5px;
+
+    }
+
+    .number b {
+        font-family: 'Arial', sans-serif;
+    }
+
+    .date {
+        font-size: 12px;
+        top: 115px;
+        font-family: sans-serif;
+
+    }
+
+    #location {
+        font-size: 10px;
+        top: 130px;
+        font-family: sans-serif;
+    }
+
+    #runningText,
+    #nextPrayerText {
+        font-size: 17px;
+        bottom: 75px;
+        font-family: sans-serif;
+
+    }
+    #prayer-times {
+        font-size: 30px; 
+        flex-direction: column; 
+        gap: 10px;
+        width: 90%; 
+        height: 90%;
+        top: 10%;
+        left: 50%; 
+        transform: translateX(-50%);
+        font-family: sans-serif;
+    }
+    
+
+    #left-times {
+        text-align: center;
+        position: fixed;
+        bottom: 85%; 
+        width: 100%;
+        color: hsla(190, 100%, 60%, 0.209);
+        z-index: 2;   
+    }
+    
+    #right-times {
+        text-align: center;
+        position: fixed;
+        top: 500px;
+        width: 100%;
+        padding: 10px 0;
+        color: hsla(190, 100%, 60%, 0.26); 
+        z-index: 2;   
+    }
+    
+}
+
+@media screen and (max-width: 480px) {
+    .analog-clock {
+        width: 250px;
+        height: 250px;
+    }
+
+    .analog-clock::before {
+        width: 270px;
+        height: 270px;
+    }
+
+    .hour-hand {
+        width: 5px;
+        height: 60px;
+    }
+
+    .minute-hand {
+        width: 4px;
+        height: 90px;
+    }
+
+    .second-hand {
+        width: 2px;
+        height: 120px;
+    }
+
+    .digital-clock {
+        font-size: 20px;
+        padding: 0 2px;
+        top: 50px;
+        left: 130px;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .number {
+        font-size: 20px;
+        inset: 1px;
+
+    }
+
+    .number b {
+        font-family: 'Arial', sans-serif;
+    }
+
+    .date {
+        font-size: 11px;
+        top: 85px;
+        left: 130px;
+        font-family: sans-serif;
+    }
+
+    #location {
+        font-size: 10px;
+        top: 160px;
+        left: 130px;
+        font-family: sans-serif;
+    }
+
+    #runningText,
+    #nextPrayerText {
+        font-size: 12px;
+        bottom: 45px;
+        left: 130px;
+        font-family: sans-serif;
+    }
+
+    .center-dot {
+        width: 15px;
+        height: 15px;
+    }
+
+    #prayer-times {
+        font-size: 30px; 
+        flex-direction: column; 
+        gap: 20px; 
+        width: 90%; 
+        top: 10%; 
+        left: 50%; 
+        transform: translateX(-50%); 
+        font-family: sans-serif;
+    }
+    
+    #left-times {
+        text-align: center;
+        position: fixed;
+        bottom: 570px;
+        width: 100%;
+        /* color: hsla(190, 100%, 60%, 0.209); */
+        z-index: 2;   
+    }
+    
+    #right-times {
+        text-align: center;
+        position: fixed;
+        top: 480px;
+        width: 100%;
+        /* color: hsla(190, 100%, 60%, 0.26);  */
+        z-index: 2;   
+    }
+
+}

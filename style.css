@@ -422,7 +422,7 @@ body {
     #right-times {
         text-align: center;
         position: fixed;
-        top: 450px;
+        top: 460px;
         width: 100%;
         /* color: hsla(190, 100%, 60%, 0.26);  */
         z-index: 2;   

@@ -394,14 +394,20 @@ body {
     }
 
     #prayer-times {
-        font-size: 30px; 
+        font-size: 20px; 
         flex-direction: column; 
-        gap: 20px; 
+        gap: 1px; 
         width: 90%; 
         top: 10%; 
         left: 50%; 
         transform: translateX(-50%); 
         font-family: sans-serif;
+    }
+
+    #left-times, #right-times {
+        display: flex;
+        flex-direction: column;
+        gap: 5px; 
     }
     
     #left-times {
@@ -416,7 +422,7 @@ body {
     #right-times {
         text-align: center;
         position: fixed;
-        top: 480px;
+        top: 450px;
         width: 100%;
         /* color: hsla(190, 100%, 60%, 0.26);  */
         z-index: 2;   

@@ -355,7 +355,7 @@ body {
         font-size: 20px;
         padding: 0 2px;
         top: 50px;
-        left: 130px;
+        left: 126px;
         font-family: 'Arial', sans-serif;
     }
 
@@ -372,14 +372,14 @@ body {
     .date {
         font-size: 11px;
         top: 85px;
-        left: 130px;
+        left: 126px;
         font-family: sans-serif;
     }
 
     #location {
         font-size: 10px;
         top: 160px;
-        left: 130px;
+        left: 126px;
         font-family: sans-serif;
     }
 
@@ -387,7 +387,7 @@ body {
     #nextPrayerText {
         font-size: 12px;
         bottom: 45px;
-        left: 130px;
+        left: 126px;
         font-family: sans-serif;
     }
 

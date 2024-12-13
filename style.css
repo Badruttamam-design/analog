@@ -323,6 +323,9 @@ body {
 }
 
 @media screen and (max-width: 480px) {
+    .clock-container{
+        margin-top: -20px;
+    }
     .analog-clock {
         width: 250px;
         height: 250px;

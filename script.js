@@ -234,7 +234,7 @@ function playAudioAtSpecificTime() {
 }
 
 
-// Fungsi untuk memperbarui jam dan menampilkan waktu azan
+// Fungsi untuk memperbarui jam dan menampilkan waktu azan serta tanggal Islam (Hijriyah) dengan angka Arab dan koma
 function updateClock() {
     const now = new Date();
     const seconds = now.getSeconds();
@@ -261,10 +261,7 @@ function updateClock() {
     // Perbarui pesan waktu sholat
     showPrayerTimeMessage(hours, minutes, seconds);
 
-    // Cek dan putar audio pada waktu yang ditentukan (3:01)
-    playAudioAtSpecificTime();
-
-    // Update date
+    // Update Gregorian date
     const dateElement = document.getElementById('date');
     const day = now.getDate();
     const monthIndex = now.getMonth();
@@ -275,6 +272,31 @@ function updateClock() {
     const days = ["Ahad", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 
     dateElement.innerText = `${days[dayIndex]}, ${String(day).padStart(2, '0')} ${months[monthIndex]} ${year}`;
+
+    // Menambahkan Tanggal Islam (Hijriyah) dengan angka Arab dan koma
+    const islamicDate = moment().format('iD iMMMM iYYYY');  // Format Hijriyah
+
+    // Mengonversi angka tanggal, bulan, tahun ke angka Arab
+    const islamicDateArabic = islamicDate.split(' ').map(item => {
+        if (item.match(/\d/)) {  // Jika item mengandung angka, konversikan
+            return convertToArabicNumerals(item);
+        }
+        return item;  // Jika bukan angka (seperti nama bulan), biarkan tetap
+    }).join(' ');
+
+    // Menambahkan koma setelah angka tanggal (misalnya "١٣ ,")
+    const islamicDateWithComma = islamicDateArabic.replace(/(\d+)( ,)/g, '$1 ,');
+
+    const islamicDateElement = document.getElementById('islamic-date');
+    if (islamicDateElement) {
+        islamicDateElement.innerText = `${islamicDateWithComma}`;
+    }
+}
+
+// Fungsi untuk mengonversi angka Latin ke angka Arab
+function convertToArabicNumerals(number) {
+    const arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    return String(number).split('').map(digit => arabicNumerals[digit]).join('');
 }
 
 // Update jam setiap detik

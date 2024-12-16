@@ -8,6 +8,9 @@
     <link rel="icon" href="kk.png" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Droid+Arabic+Naskh&display=swap" rel="stylesheet">
+    <!-- Link ke Moment.js dan Moment Hijri -->
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.0/moment-hijri.min.js"></script>
     <link rel="stylesheet" href="animate/animate.css"/>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -37,15 +40,16 @@
             <div class="center-dot wow zoomIn" data-wow-delay="2s"></div>
 
             <!-- Jam Digital -->
-            <div class="digital-clock  wow fadeIn" data-wow-delay="3s" id="digital-clock"></div>
+            <div class="digital-clock  wow fadeInDown" data-wow-delay="3s" id="digital-clock"></div>
             <!-- Tanggal, Bulan, dan Tahun -->
-            <div class="date wow fadeIn" data-wow-delay="3s" id="date"></div>
-            <div class="date wow fadeIn" data-wow-delay="3s" id="location"></div>
+            <div class="date wow fadeInDown" data-wow-delay="3s" id="date"></div>
+            <div class="islamic  wow fadeInUp" data-wow-delay="3s" id="islamic-date"></div>
+            <div class="date wow fadeInDown" data-wow-delay="3s" id="location"></div>
             <!-- Running Text for Prayer Time -->
             <div id="runningText"></div>
 
             <!-- Next Prayer Countdown -->
-            <div class="prayer wow fadeIn" data-wow-delay="3s" id="nextPrayerText"></div>
+            <div class="prayer wow fadeInUp" data-wow-delay="3s" id="nextPrayerText"></div>
             <audio id="azanAudio" src="adan.mp3" preload="auto"></audio>
 
         </div>

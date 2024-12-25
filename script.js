@@ -273,6 +273,9 @@ function updateClock() {
 
     dateElement.innerText = `${days[dayIndex]}, ${String(day).padStart(2, '0')} ${months[monthIndex]} ${year}`;
 
+    // Cek dan putar audio pada waktu yang ditentukan (3:01)
+    playAudioAtSpecificTime();
+
     // Menambahkan Tanggal Islam (Hijriyah) dengan angka Arab dan koma
     const islamicDate = moment().format('iD iMMMM iYYYY');  // Format Hijriyah
 

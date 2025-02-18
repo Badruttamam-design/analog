@@ -49,7 +49,7 @@ function getAzanTimes(position) {
             const state = address.state || '';
 
             // Menyusun alamat dalam format yang lebih tepat
-            const location = `${village}, ${city}, ${state}`;
+            const location = `${village} ${city} ${state}`;
 
             // Menampilkan lokasi di elemen dengan ID 'location'
             const locationElement = document.getElementById('location');

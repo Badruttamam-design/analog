@@ -8,19 +8,7 @@ particlesJS("particles-js", {
             }
         },
         color: {
-            value: [
-                "#ff0000", // Merah
-                "#ff7f00", // Oranye
-                "#ffff00", // Kuning
-                "#7fff00", // Hijau
-                "#00ff00", // Hijau Muda
-                "#00ffff", // Cyan
-                "#007fff", // Biru
-                "#0000ff", // Biru Tua
-                "#7f00ff", // Ungu
-                "#ff00ff"  // Magenta
-
-            ]
+            value: ["#00d9ff", "#f70dbc", "#ffeb3b"]  // Default colors: cyan, pink, kuning
         },
         shape: {
             type: "circle",  // Bentuk bulat seperti serpihan salju

@@ -8,10 +8,9 @@
     <link rel="icon" href="kk.png" type="image/x-icon">
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Droid+Arabic+Naskh&display=swap" rel="stylesheet">
-    <!-- Link ke Moment.js dan Moment Hijri -->
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/moment-hijri@2.1.0/moment-hijri.min.js"></script>
-    <link rel="stylesheet" href="animate/animate.css"/>
+    <link rel="stylesheet" href="animate/animate.css" />
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -19,7 +18,6 @@
 
     <div class="clock-container wow fadeInDown" data-wow-delay="0.1s">
         <div class="analog-clock">
-            <!-- Angka di sekitar jam -->
             <div class="number wow zoomIn" data-wow-delay="1s" style="--n:1"><b>1</b></div>
             <div class="number wow zoomIn" data-wow-delay="1s" style="--n:2"><b>2</b></div>
             <div class="number wow zoomIn" data-wow-delay="1s" style="--n:3"><b>3</b></div>
@@ -33,27 +31,35 @@
             <div class="number wow zoomIn" data-wow-delay="1s" style="--n:11"><b>11</b></div>
             <div class="number wow zoomIn" data-wow-delay="1s" style="--n:12"><b>12</b></div>
 
-            <!-- Jarum jam -->
+            <!-- Hour and Minute Tick Marks -->
+            <div class="tick-marks"></div>
+
+            <!-- Progress Bar SVG -->
+            <svg class="progress-ring" width="540" height="540">
+                <circle class="progress-ring-circle" stroke-width="8" fill="transparent" r="262" cx="270" cy="270" />
+            </svg>
+
             <div class="hand hour-hand wow zoomIn" data-wow-delay="2s"></div>
             <div class="hand minute-hand wow zoomIn" data-wow-delay="2s"></div>
             <div class="hand second-hand wow zoomIn" data-wow-delay="2s"></div>
             <div class="center-dot wow zoomIn" data-wow-delay="2s"></div>
 
-            <!-- Jam Digital -->
             <div class="digital-clock  wow fadeInDown" data-wow-delay="3s" id="digital-clock"></div>
-            <!-- Tanggal, Bulan, dan Tahun -->
             <div class="date wow fadeInDown" data-wow-delay="3s" id="date"></div>
             <div class="islamic  wow fadeInUp" data-wow-delay="3s" id="islamic-date"></div>
             <div class="date wow fadeInDown" data-wow-delay="3s" id="location"></div>
-            <!-- Running Text for Prayer Time -->
+            <div class="weather wow fadeInDown" data-wow-delay="3s" id="weather-info"></div>
             <div id="runningText"></div>
 
-            <!-- Next Prayer Countdown -->
             <div class="prayer wow fadeInUp" data-wow-delay="3s" id="nextPrayerText"></div>
             <audio id="azanAudio" src="adan.mp3" preload="auto"></audio>
 
         </div>
     </div>
+
+    <!-- Countdown Alert -->
+    <div id="countdown-alert" class="countdown-notification"></div>
+
     <div class="waktu wow fadeIn" data-wow-delay="3s" id="prayer-times">
         <div id="left-times">
             <div id="imsak">IMSAK </div>
@@ -67,10 +73,75 @@
         </div>
     </div>
 
-    
-     <!-- particles -->
+
     <div id="particles-js"></div>
     <div id="countdown"></div>
+
+    <!-- Calendar Toggle Button -->
+    <button id="calendar-toggle" class="calendar-toggle-btn wow fadeInUp" data-wow-delay="4s" title="Toggle Calendar">
+        📅
+    </button>
+
+    <!-- Mini Calendar Widget -->
+    <div id="mini-calendar" class="mini-calendar hidden">
+        <div class="calendar-header">
+            <button id="prev-month" class="calendar-nav-btn">‹</button>
+            <div class="calendar-title">
+                <div id="calendar-month-year"></div>
+                <div id="calendar-hijri-month" class="hijri-month"></div>
+            </div>
+            <button id="next-month" class="calendar-nav-btn">›</button>
+        </div>
+        <div class="calendar-weekdays">
+            <div>AHD</div>
+            <div>SEN</div>
+            <div>SEL</div>
+            <div>RAB</div>
+            <div>KAM</div>
+            <div>JUM</div>
+            <div>SAB</div>
+        </div>
+        <div id="calendar-dates" class="calendar-dates"></div>
+        <div class="calendar-close-btn">
+            <button id="close-calendar">✕ Close</button>
+        </div>
+    </div>
+
+    <!-- Prayer Times Popup -->
+    <div id="prayer-popup" class="prayer-popup hidden">
+        <div class="popup-content">
+            <button class="popup-close">✕</button>
+            <h3 id="popup-date"></h3>
+            <div id="popup-hijri-date" class="popup-hijri"></div>
+            <div class="popup-prayer-times">
+                <div class="prayer-time-item">
+                    <span>IMSAK</span>
+                    <span id="popup-imsak">--:--</span>
+                </div>
+                <div class="prayer-time-item">
+                    <span>SUBUH</span>
+                    <span id="popup-subuh">--:--</span>
+                </div>
+                <div class="prayer-time-item">
+                    <span>DHUHUR</span>
+                    <span id="popup-dhuhur">--:--</span>
+                </div>
+                <div class="prayer-time-item">
+                    <span>ASHAR</span>
+                    <span id="popup-ashar">--:--</span>
+                </div>
+                <div class="prayer-time-item">
+                    <span>MAGHRIB</span>
+                    <span id="popup-maghrib">--:--</span>
+                </div>
+                <div class="prayer-time-item">
+                    <span>ISYA</span>
+                    <span id="popup-isya">--:--</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <footer class="footer wow fadeInDown" data-wow-delay="4s">
         <p>بدر التمام إبن علي</p>
     </footer>

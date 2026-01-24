@@ -5,6 +5,39 @@ let currentProgressCircle = null; // Reference ke progress circle element
 let userLatitude = null;  // Menyimpan latitude user
 let userLongitude = null; // Menyimpan longitude user
 
+// ====================================
+// RAMADHAN MODE STATE MANAGEMENT
+// ====================================
+let isRamadhanActive = false;  // Flag untuk Ramadhan mode
+let ramadhanDayNumber = 0;     // Hari ke berapa dalam Ramadhan (1-30)
+let ramadhanYear = 0;          // Tahun Hijri Ramadhan
+let ramadhanMonthData = null;  // Cache untuk data sholat 30 hari
+
+// Ramadhan Detection Function
+function isRamadhanMode() {
+    const currentHijriMonth = moment().iMonth(); // 0-11, Ramadan = 8
+    return currentHijriMonth === 8; // Ramadan is month 9 (index 8)
+}
+
+// Get current day number in Ramadhan (1-30)
+function getRamadhanDayNumber() {
+    if (!isRamadhanMode()) return 0;
+
+    return moment().iDate(); // Current Hijri day
+}
+
+// Calculate days until Eid (1 Shawwal)
+function getDaysUntilEid() {
+    if (!isRamadhanMode()) return 0;
+    const currentDay = getRamadhanDayNumber();
+    return 30 - currentDay;
+}
+
+// Get Ramadhan year
+function getRamadhanYear() {
+    return moment().iYear();
+}
+
 // Generate Tick Marks for Clock
 function createTickMarks() {
     const tickContainer = document.querySelector('.tick-marks');
@@ -196,6 +229,7 @@ function updateProgressBar(secondsUntilNextPrayer, totalSecondsBetweenPrayers) {
 function updateCountdownEffects(secondsUntilNextPrayer, nextPrayer) {
     const clockContainer = document.querySelector('.clock-container');
     const countdownAlert = document.getElementById('countdown-alert');
+    const ramadhanCountdown = document.getElementById('ramadhan-countdown');
 
     // Activate pulse animation when < 3 minutes
     if (secondsUntilNextPrayer < 180 && secondsUntilNextPrayer > 0) {
@@ -209,6 +243,12 @@ function updateCountdownEffects(secondsUntilNextPrayer, nextPrayer) {
             const seconds = secondsUntilNextPrayer % 60;
             countdownAlert.textContent = `⏰ ${nextPrayer} dalam ${minutes}:${String(seconds).padStart(2, '0')}`;
             countdownAlert.classList.add('show', 'pulse');
+
+            // Hide Ramadhan countdown to prevent overlap (mobile)
+            if (ramadhanCountdown && isRamadhanActive) {
+                ramadhanCountdown.style.opacity = '0';
+                ramadhanCountdown.style.pointerEvents = 'none';
+            }
         }
     } else {
         if (clockContainer) {
@@ -216,6 +256,12 @@ function updateCountdownEffects(secondsUntilNextPrayer, nextPrayer) {
         }
         if (countdownAlert) {
             countdownAlert.classList.remove('show', 'pulse');
+
+            // Show Ramadhan countdown again when notification disappears
+            if (ramadhanCountdown && isRamadhanActive) {
+                ramadhanCountdown.style.opacity = '1';
+                ramadhanCountdown.style.pointerEvents = 'auto';
+            }
         }
     }
 }
@@ -436,6 +482,11 @@ function updateClock() {
 
     playAudioAtSpecificTime();
 
+    // Update Ramadhan countdown if active
+    if (isRamadhanActive) {
+        updateRamadhanCountdown();
+    }
+
     const islamicDate = moment().format('iD iMMMM iYYYY');
 
     const islamicDateArabic = islamicDate.split(' ').map(item => {
@@ -506,6 +557,10 @@ function updateParticleColors(isPrayerTime) {
             // Warna gradasi saat waktu sholat - lebih banyak warna
             pJS.particles.color.value = ["#00d9ff", "#ee00ff", "#2f2dca", "#ffd700", "#00ffcc", "#ff6b9d"];
             pJS.particles.line_linked.color = "#ee00ff";
+        } else if (isRamadhanActive) {
+            // Warna Ramadhan - green, gold, purple
+            pJS.particles.color.value = ["#22c55e", "#fbbf24", "#a855f7", "#10b981", "#ffd700"];
+            pJS.particles.line_linked.color = "#fbbf24";
         } else {
             // Warna default - tambah pink dan kuning
             pJS.particles.color.value = ["#00d9ff", "#ff69b4", "#ffeb3b"];
@@ -516,6 +571,215 @@ function updateParticleColors(isPrayerTime) {
         if (pJS.fn && pJS.fn.particlesRefresh) {
             pJS.fn.particlesRefresh();
         }
+    }
+}
+
+// ====================================
+// RAMADHAN MODE FUNCTIONS
+// ====================================
+
+// Update Ramadhan Countdown (Sahur or Iftar)
+function updateRamadhanCountdown() {
+    if (!isRamadhanActive || !prayerTimesData.Imsak || !prayerTimesData.Maghrib) return;
+
+    const now = new Date();
+    const currentTimeInSeconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+
+    const imsakSeconds = convertToSeconds(prayerTimesData.Imsak);
+    const maghribSeconds = convertToSeconds(prayerTimesData.Maghrib);
+
+    const countdownDisplay = document.getElementById('ramadhan-countdown');
+    const countdownLabel = countdownDisplay.querySelector('.countdown-label');
+    const countdownTime = countdownDisplay.querySelector('.countdown-time');
+    const countdownSubtext = countdownDisplay.querySelector('.countdown-subtext');
+
+    let targetTime, label, subtext;
+
+    // Determine which countdown to show
+    if (currentTimeInSeconds < imsakSeconds) {
+        // Before Imsak - countdown to Sahur ending
+        targetTime = imsakSeconds;
+        label = '⏰ Waktu Sahur Berakhir';
+        subtext = 'Segera Akhiri Sahur';
+    } else if (currentTimeInSeconds >= imsakSeconds && currentTimeInSeconds < maghribSeconds) {
+        // After Imsak, before Maghrib - countdown to Iftar
+        targetTime = maghribSeconds;
+        label = '🌙 Waktu Berbuka Puasa';
+        subtext = 'Menuju Waktu Maghrib';
+    } else {
+        // After Maghrib - countdown to next day's Imsak
+        targetTime = imsakSeconds + (24 * 3600); // Next day
+        label = '⏰ Waktu Sahur Berakhir';
+        subtext = 'Esok Hari';
+    }
+
+    let secondsRemaining = targetTime - currentTimeInSeconds;
+    if (secondsRemaining < 0) secondsRemaining += 24 * 3600;
+
+    const hours = Math.floor(secondsRemaining / 3600);
+    const minutes = Math.floor((secondsRemaining % 3600) / 60);
+    const seconds = secondsRemaining % 60;
+
+    // Show countdown ONLY if less than 2 hours remaining
+    if (secondsRemaining <= 7200 && secondsRemaining > 0) {
+        countdownLabel.textContent = label;
+        countdownTime.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        countdownSubtext.textContent = subtext;
+        countdownDisplay.classList.remove('hidden');
+        countdownDisplay.style.display = 'block';
+    } else {
+        countdownDisplay.classList.add('hidden');
+        countdownDisplay.style.display = 'none';
+    }
+}
+
+// Update Ramadhan Progress Indicator
+function updateRamadhanProgress() {
+    if (!isRamadhanActive) return;
+
+    const progressDisplay = document.getElementById('ramadhan-progress');
+    const progressDay = progressDisplay.querySelector('.progress-day');
+    const progressEid = progressDisplay.querySelector('.progress-eid');
+    const progressFill = progressDisplay.querySelector('.progress-fill');
+
+    const dayNum = ramadhanDayNumber;
+    const daysToEid = getDaysUntilEid();
+
+    // Update text
+    progressDay.textContent = dayNum;
+    progressEid.textContent = `${daysToEid} Hari Lagi Menuju Idul Fitri`;
+
+    // Always use r=54 since SVG scales with viewBox
+    const circumference = 2 * Math.PI * 54; // 339.292
+
+    // Update circular progress
+    const progressPercent = dayNum / 30;
+    const offset = circumference * (1 - progressPercent);
+
+    // Set both dasharray and dashoffset
+    progressFill.style.strokeDasharray = circumference;
+    progressFill.style.strokeDashoffset = offset;
+
+    progressDisplay.classList.remove('hidden');
+}
+
+// Activate Ramadhan Mode
+function activateRamadhanMode() {
+    isRamadhanActive = true;
+    ramadhanDayNumber = getRamadhanDayNumber();
+    ramadhanYear = getRamadhanYear();
+
+    // Add ramadhan-mode class to body
+    document.body.classList.add('ramadhan-mode');
+
+    // Show Imsakiyah button
+    const imsakiyahBtn = document.getElementById('imsakiyah-toggle');
+    if (imsakiyahBtn) imsakiyahBtn.classList.remove('hidden');
+
+    // Activate Ramadhan particles (stars, polygons, etc)
+    if (typeof window.activateRamadhanParticles === 'function') {
+        window.activateRamadhanParticles();
+    } else {
+        // Fallback: Update particle colors
+        updateParticleColors(false);
+    }
+
+    // Update progress
+    updateRamadhanProgress();
+
+    console.log(`🌙 Ramadhan Mode Activated - Day ${ramadhanDayNumber} of Ramadhan ${ramadhanYear}`);
+}
+
+// Deactivate Ramadhan Mode
+function deactivateRamadhanMode() {
+    isRamadhanActive = false;
+
+    // Remove ramadhan-mode class
+    document.body.classList.remove('ramadhan-mode');
+
+    // Hide Ramadhan UI elements
+    const countdownDisplay = document.getElementById('ramadhan-countdown');
+    const progressDisplay = document.getElementById('ramadhan-progress');
+    const imsakiyahBtn = document.getElementById('imsakiyah-toggle');
+
+    if (countdownDisplay) countdownDisplay.classList.add('hidden');
+    if (progressDisplay) progressDisplay.classList.add('hidden');
+    if (imsakiyahBtn) imsakiyahBtn.classList.add('hidden');
+
+    // Deactivate Ramadhan particles
+    if (typeof window.deactivateRamadhanParticles === 'function') {
+        window.deactivateRamadhanParticles();
+    } else {
+        // Fallback: Restore default particle colors
+        updateParticleColors(false);
+    }
+
+    console.log('Ramadhan Mode Deactivated');
+}
+
+// Fetch and Generate Imsakiyah Table for 30 days
+async function generateImsakiyahTable() {
+    if (!userLatitude || !userLongitude) {
+        console.error('User location not available for Imsakiyah');
+        return;
+    }
+
+    const tableBody = document.querySelector('#imsakiyah-table tbody');
+    const yearDisplay = document.getElementById('imsakiyah-year-display');
+
+    if (!tableBody) return;
+
+    // Show loading
+    tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">Memuat data...</td></tr>';
+
+    // Display Hijri year
+    if (yearDisplay) {
+        yearDisplay.textContent = `Ramadhan ${ramadhanYear} H`;
+    }
+
+    try {
+        // Use Aladhan API to get monthly calendar
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const apiUrl = `https://api.aladhan.com/v1/hijriCalendar/9/${ramadhanYear}?latitude=${userLatitude}&longitude=${userLongitude}&method=3&timezone=${timezone}`;
+
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        if (data.code === 200 && data.data) {
+            ramadhanMonthData = data.data; // Cache the data
+            tableBody.innerHTML = ''; // Clear loading
+
+            const dayNames = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+
+            data.data.forEach((dayData, index) => {
+                const hijriDay = dayData.hijri.day;
+                const gregorianDate = dayData.gregorian.date;
+                const dayName = dayNames[new Date(gregorianDate).getDay()];
+                const imsak = dayData.timings.Imsak.split(' ')[0]; // Remove timezone
+                const maghrib = dayData.timings.Maghrib.split(' ')[0];
+
+                const row = document.createElement('tr');
+
+                // Highlight current day
+                if (parseInt(hijriDay) === ramadhanDayNumber) {
+                    row.classList.add('current-day');
+                }
+
+                row.innerHTML = `
+                    <td>${hijriDay}</td>
+                    <td>${dayName}, ${gregorianDate}</td>
+                    <td>${imsak}</td>
+                    <td>${maghrib}</td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        } else {
+            tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#ee00ff;">Gagal memuat data</td></tr>';
+        }
+    } catch (error) {
+        console.error('Error fetching Imsakiyah:', error);
+        tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#ee00ff;">Terjadi kesalahan</td></tr>';
     }
 }
 
@@ -593,16 +857,18 @@ function generateCalendar(date) {
     const month = date.getMonth();
 
     // Update header
-    const monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"];
+    const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+        "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
     if (calendarMonthYear) {
         calendarMonthYear.textContent = `${monthNames[month]} ${year}`;
     }
 
-    // Get Hijri month for the first day of the month
-    const firstDayOfMonth = new Date(year, month, 1);
-    const hijriDate = moment(firstDayOfMonth).format('iMMMM iYYYY');
+    // Get Hijri month - use today's date if viewing current month, otherwise use middle of month
+    const hijriToday = new Date();
+    const isViewingCurrentMonth = hijriToday.getFullYear() === year && hijriToday.getMonth() === month;
+    const referenceDate = isViewingCurrentMonth ? hijriToday : new Date(year, month, 15);
+    const hijriDate = moment(referenceDate).format('iMMMM iYYYY');
     if (calendarHijriMonth) {
         calendarHijriMonth.textContent = hijriDate;
     }
@@ -689,7 +955,7 @@ function createDateElement(day, year, month, isOtherMonth = false, isToday = fal
 function showPrayerTimesPopup(date) {
     if (!prayerPopup) return;
 
-    const dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+    const dayNames = ["Ahad", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
     const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
         "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
@@ -786,7 +1052,80 @@ if (miniCalendar) {
     generateCalendar(currentCalendarDate);
 }
 
+// ====================================
+// RAMADHAN MODE INITIALIZATION
+// ====================================
+
+// Imsakiyah Modal Event Listeners
+const imsakiyahToggle = document.getElementById('imsakiyah-toggle');
+const imsakiyahModal = document.getElementById('imsakiyah-modal');
+const modalClose = imsakiyahModal ? imsakiyahModal.querySelector('.modal-close') : null;
+
+if (imsakiyahToggle) {
+    imsakiyahToggle.addEventListener('click', () => {
+        if (imsakiyahModal) {
+            imsakiyahModal.classList.remove('hidden');
+            // Generate table if not already generated
+            if (!ramadhanMonthData) {
+                generateImsakiyahTable();
+            }
+        }
+    });
+}
+
+if (modalClose) {
+    modalClose.addEventListener('click', () => {
+        if (imsakiyahModal) {
+            imsakiyahModal.classList.add('hidden');
+        }
+    });
+}
+
+// Close modal when clicking outside
+if (imsakiyahModal) {
+    imsakiyahModal.addEventListener('click', (e) => {
+        if (e.target === imsakiyahModal) {
+            imsakiyahModal.classList.add('hidden');
+        }
+    });
+}
+
+// Initialize Ramadhan Mode
+function initializeRamadhanMode() {
+    if (isRamadhanMode()) {
+        activateRamadhanMode();
+    } else {
+        deactivateRamadhanMode();
+    }
+}
+
+// Check Ramadhan mode every minute
+setInterval(() => {
+    const shouldBeActive = isRamadhanMode();
+    if (shouldBeActive !== isRamadhanActive) {
+        if (shouldBeActive) {
+            activateRamadhanMode();
+        } else {
+            deactivateRamadhanMode();
+        }
+    }
+
+    // Update Ramadhan day number daily
+    if (isRamadhanActive) {
+        const newDayNum = getRamadhanDayNumber();
+        if (newDayNum !== ramadhanDayNumber) {
+            ramadhanDayNumber = newDayNum;
+            updateRamadhanProgress();
+        }
+    }
+}, 60000); // Check every minute
+
 setInterval(updateClock, 1000);
 updateClock();
 
 getLocation();
+
+// Wait for location before initializing Ramadhan mode
+setTimeout(() => {
+    initializeRamadhanMode();
+}, 2000);

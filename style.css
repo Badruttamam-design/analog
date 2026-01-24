@@ -372,6 +372,379 @@ body {
 }
 
 /* ====================================
+   RAMADHAN MODE STYLES
+   ==================================== */
+
+/* Ramadhan Theme Variables */
+:root {
+    --ramadhan-primary: #10b981;
+    --ramadhan-gold: #fbbf24;
+    --ramadhan-purple: #a855f7;
+    --ramadhan-teal: #14b8a6;
+    --ramadhan-green: #22c55e;
+}
+
+/* Ramadhan Mode Body Overlay */
+body.ramadhan-mode::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg,
+            rgba(16, 185, 129, 0.08) 0%,
+            rgba(251, 191, 36, 0.05) 50%,
+            rgba(168, 85, 247, 0.08) 100%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Clock transformations for Ramadhan */
+.ramadhan-mode .analog-clock::before {
+    background: linear-gradient(var(--ramadhan-green), var(--ramadhan-gold), var(--ramadhan-purple));
+    box-shadow: 0 0 15px 15px rgba(251, 191, 36, 0.3);
+}
+
+.ramadhan-mode .progress-ring-circle {
+    stroke: #00d9ff;
+    /* Blue color */
+}
+
+.ramadhan-mode .progress-ring-circle.near-prayer {
+    stroke: #00d9ff;
+    /* Blue color when near prayer time */
+}
+
+.ramadhan-mode .hour-hand,
+.ramadhan-mode .minute-hand,
+.ramadhan-mode .second-hand {
+    background: linear-gradient(to top, var(--ramadhan-green), var(--ramadhan-gold));
+}
+
+/* Ramadhan Countdown Display */
+.ramadhan-countdown {
+    position: fixed;
+    bottom: 40px;
+    left: 200px;
+    transform: none;
+    text-align: center;
+    background: linear-gradient(135deg,
+            rgba(16, 185, 129, 0.25),
+            rgba(251, 191, 36, 0.25));
+    backdrop-filter: blur(20px);
+    border: 2px solid var(--ramadhan-gold);
+    border-radius: 20px;
+    padding: 15px 20px;
+    z-index: 100;
+    box-shadow: 0 0 25px rgba(251, 191, 36, 0.4),
+        0 0 50px rgba(16, 185, 129, 0.2);
+    opacity: 1;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+}
+
+.ramadhan-countdown.hidden {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+    pointer-events: none;
+}
+
+.countdown-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--ramadhan-gold);
+    margin-bottom: 8px;
+    font-family: 'Droid Arabic Naskh', serif;
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+}
+
+.countdown-time {
+    font-size: 36px;
+    font-weight: bold;
+    color: var(--ramadhan-green);
+    font-family: 'Arial', sans-serif;
+    letter-spacing: 4px;
+    text-shadow: 0 0 15px rgba(34, 197, 94, 0.6);
+    animation: pulseglow 2s ease-in-out infinite;
+}
+
+.countdown-subtext {
+    font-size: 12px;
+    color: var(--ramadhan-purple);
+    margin-top: 8px;
+    font-family: sans-serif;
+}
+
+@keyframes pulseglow {
+
+    0%,
+    100% {
+        text-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+        transform: scale(1);
+    }
+
+    50% {
+        text-shadow: 0 0 30px rgba(251, 191, 36, 0.8);
+        transform: scale(1.02);
+    }
+}
+
+/* Ramadhan Progress Indicator */
+.ramadhan-progress {
+    position: fixed;
+    bottom: 40px;
+    left: 30px;
+    width: 155px;
+    min-height: 180px;
+    text-align: center;
+    background: linear-gradient(135deg,
+            rgba(16, 185, 129, 0.2),
+            rgba(251, 191, 36, 0.2));
+    backdrop-filter: blur(15px);
+    border: 2px solid var(--ramadhan-gold);
+    border-radius: 20px;
+    padding: 15px;
+    z-index: 100;
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.ramadhan-progress.hidden {
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+}
+
+.progress-circle {
+    margin: 0 auto 5px;
+    display: block;
+    flex-shrink: 0;
+}
+
+.progress-fill {
+    stroke-dashoffset: 339.292;
+    transition: stroke-dashoffset 1s ease;
+}
+
+.progress-text {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.progress-day {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--ramadhan-gold);
+    font-family: sans-serif;
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+    line-height: 1;
+}
+
+.progress-label {
+    font-size: 12px;
+    color: var(--ramadhan-green);
+    font-family: 'Droid Arabic Naskh', serif;
+    margin-top: 2px;
+}
+
+.progress-eid {
+    font-size: 13px;
+    color: var(--ramadhan-purple);
+    margin-top: 10px;
+    font-family: sans-serif;
+    font-weight: bold;
+    padding: 0 5px;
+    text-align: center;
+    line-height: 1.3;
+}
+
+/* Imsakiyah Toggle Button */
+.imsakiyah-toggle-btn {
+    position: fixed;
+    bottom: 45px;
+    right: 95px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ramadhan-green), var(--ramadhan-gold));
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 100;
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+}
+
+.imsakiyah-toggle-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.8);
+}
+
+.imsakiyah-toggle-btn.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.5);
+}
+
+/* Imsakiyah Modal */
+.imsakiyah-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 300;
+    transition: opacity 0.3s ease;
+}
+
+.imsakiyah-modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.imsakiyah-modal .modal-content {
+    background: linear-gradient(135deg, rgba(5, 98, 99, 0.98), rgba(0, 13, 26, 0.98));
+    border: 3px solid var(--ramadhan-gold);
+    border-radius: 25px;
+    padding: 35px;
+    max-width: 700px;
+    width: 90%;
+    max-height: 85vh;
+    position: relative;
+    box-shadow: 0 0 60px rgba(251, 191, 36, 0.6);
+    overflow: hidden;
+}
+
+.imsakiyah-modal h2 {
+    color: var(--ramadhan-gold);
+    font-size: 28px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-family: 'Droid Arabic Naskh', serif;
+    text-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
+}
+
+.hijri-year-display {
+    text-align: center;
+    color: var(--ramadhan-green);
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-family: 'Droid Arabic Naskh', serif;
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: 2px solid var(--ramadhan-purple);
+    color: var(--ramadhan-purple);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    background: var(--ramadhan-purple);
+    color: #000;
+    transform: rotate(90deg);
+}
+
+.imsakiyah-table-container {
+    max-height: 60vh;
+    overflow-y: auto;
+    border-radius: 15px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--ramadhan-gold) rgba(0, 217, 255, 0.1);
+}
+
+.imsakiyah-table-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.imsakiyah-table-container::-webkit-scrollbar-track {
+    background: rgba(0, 217, 255, 0.1);
+    border-radius: 10px;
+}
+
+.imsakiyah-table-container::-webkit-scrollbar-thumb {
+    background: var(--ramadhan-gold);
+    border-radius: 10px;
+}
+
+#imsakiyah-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: sans-serif;
+}
+
+#imsakiyah-table thead {
+    position: sticky;
+    top: 0;
+    background: linear-gradient(135deg, var(--ramadhan-green), var(--ramadhan-gold));
+    z-index: 10;
+}
+
+#imsakiyah-table th {
+    padding: 15px;
+    text-align: center;
+    color: #000;
+    font-weight: bold;
+    font-size: 16px;
+    border-bottom: 2px solid var(--ramadhan-gold);
+}
+
+#imsakiyah-table td {
+    padding: 12px;
+    text-align: center;
+    color: #00d9ff;
+    border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+}
+
+#imsakiyah-table tbody tr {
+    background: rgba(0, 217, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+#imsakiyah-table tbody tr:nth-child(even) {
+    background: rgba(16, 185, 129, 0.08);
+}
+
+#imsakiyah-table tbody tr:hover {
+    background: rgba(251, 191, 36, 0.15);
+    transform: scale(1.01);
+}
+
+#imsakiyah-table tbody tr.current-day {
+    background: linear-gradient(135deg,
+            rgba(251, 191, 36, 0.3),
+            rgba(16, 185, 129, 0.3));
+    border: 2px solid var(--ramadhan-gold);
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+}
+
+#imsakiyah-table tbody tr.current-day td {
+    color: var(--ramadhan-gold);
+    font-weight: bold;
+}
+
+/* ====================================
    CALENDAR STYLES
    ==================================== */
 
@@ -725,9 +1098,16 @@ body {
     }
 
     .number {
-        font-size: 30px;
-        inset: 5px;
+        font-size: 27px;
+        inset: 12px;
+    }
 
+    .tick {
+        transform-origin: center 175px;
+    }
+
+    .tick.hour {
+        height: 15px;
     }
 
     .number b {
@@ -822,6 +1202,54 @@ body {
         height: 13px;
     }
 
+    /* Ramadhan Progress - Mobile */
+    .ramadhan-progress {
+        bottom: 20px;
+        left: 10px;
+        right: auto;
+        transform: none;
+        width: 100px;
+        min-height: 140px;
+        padding: 8px;
+    }
+
+    .progress-circle {
+        width: 75px;
+        height: 75px;
+    }
+
+    .progress-circle .progress-bg,
+    .progress-circle .progress-fill {
+        r: 33;
+        cx: 37.5;
+        cy: 37.5;
+        stroke-width: 4;
+    }
+
+    .progress-fill {
+        stroke-dasharray: 207.2;
+        stroke-dashoffset: 207.2;
+    }
+
+    .progress-text {
+        top: 32px;
+    }
+
+    .progress-day {
+        font-size: 20px;
+    }
+
+    .progress-label {
+        font-size: 9px;
+    }
+
+    .progress-eid {
+        font-size: 10px;
+        margin-top: 8px;
+        line-height: 1.2;
+        padding: 0 2px;
+    }
+
     /* Calendar Responsive - Tablet */
     .calendar-toggle-btn {
         width: 50px;
@@ -904,13 +1332,21 @@ body {
     }
 
     .number {
-        font-size: 20px;
-        inset: 1px;
-
+        font-size: 17px;
+        inset: 9px;
     }
 
     .number b {
         font-family: 'Arial', sans-serif;
+    }
+
+    .tick {
+        transform-origin: center 125px;
+        height: 6px;
+    }
+
+    .tick.hour {
+        height: 12px;
     }
 
     .date {
@@ -1007,6 +1443,16 @@ body {
         height: 10px;
     }
 
+    /* Imsakiyah Button - Mobile */
+    .imsakiyah-toggle-btn {
+        bottom: 20px;
+        right: 80px;
+        left: auto;
+        width: 50px;
+        height: 50px;
+        font-size: 26px;
+    }
+
     /* Calendar Responsive - Mobile */
     .calendar-toggle-btn {
         width: 45px;
@@ -1044,16 +1490,28 @@ body {
     }
 
     .calendar-weekdays div {
-        font-size: 10px;
-        padding: 5px 0;
+        font-size: 9px;
+        padding: 4px 0;
+    }
+
+    .calendar-dates {
+        gap: 3px;
+    }
+
+    .calendar-date {
+        padding: 2px;
+        min-height: 40px;
     }
 
     .date-number {
-        font-size: 12px;
+        font-size: 11px;
+        line-height: 1.2;
     }
 
     .date-hijri {
-        font-size: 10px;
+        font-size: 8px;
+        line-height: 1.1;
+        margin-top: 1px;
     }
 
     .popup-content {
@@ -1072,6 +1530,137 @@ body {
     .prayer-time-item {
         padding: 10px 15px;
         font-size: 14px;
+    }
+
+    /* ====================================
+       RAMADHAN MODE - SMALL MOBILE (480px)
+       ==================================== */
+
+    /* Ramadhan Countdown - Small Mobile */
+    .ramadhan-countdown {
+        top: 15px;
+        left: 50%;
+        bottom: auto;
+        transform: translateX(-50%);
+        padding: 10px 15px;
+        max-width: 95%;
+        box-sizing: border-box;
+    }
+
+    .countdown-label {
+        font-size: 12px;
+        margin-bottom: 5px;
+    }
+
+    .countdown-time {
+        font-size: 24px;
+        letter-spacing: 2px;
+    }
+
+    .countdown-subtext {
+        font-size: 9px;
+        margin-top: 4px;
+    }
+
+    /* Ramadhan Progress - Small Mobile */
+    .ramadhan-progress {
+        bottom: 10px;
+        left: 5px;
+        width: 110px;
+        min-height: 145px;
+        padding: 8px 6px;
+    }
+
+    .progress-circle {
+        width: 75px;
+        height: 75px;
+    }
+
+    .progress-circle .progress-bg,
+    .progress-circle .progress-fill {
+        r: 33;
+        cx: 37.5;
+        cy: 37.5;
+        stroke-width: 4;
+    }
+
+    .progress-fill {
+        stroke-dasharray: 207.2;
+        stroke-dashoffset: 207.2;
+    }
+
+    .progress-text {
+        top: 32px;
+    }
+
+    .progress-day {
+        font-size: 22px;
+    }
+
+    .progress-label {
+        font-size: 9px;
+    }
+
+    .progress-eid {
+        font-size: 10px;
+        margin-top: 8px;
+        line-height: 1.2;
+    }
+
+    /* Imsakiyah Button - Small Mobile */
+    .imsakiyah-toggle-btn {
+        bottom: 15px;
+        right: 70px;
+        width: 45px;
+        height: 45px;
+        font-size: 24px;
+    }
+
+    /* Calendar Button - Small Mobile */
+    .calendar-toggle-btn {
+        bottom: 15px !important;
+        right: 15px !important;
+        width: 45px !important;
+        height: 45px !important;
+        font-size: 24px !important;
+    }
+
+    /* Imsakiyah Modal - Small Mobile */
+    .imsakiyah-modal .modal-content {
+        padding: 18px 10px;
+        max-width: 98%;
+    }
+
+    .imsakiyah-modal h2 {
+        font-size: 18px;
+        margin-bottom: 6px;
+    }
+
+    .hijri-year-display {
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+
+    .modal-close {
+        width: 32px;
+        height: 32px;
+        font-size: 18px;
+        top: 10px;
+        right: 10px;
+    }
+
+    .imsakiyah-table-container {
+        max-height: 50vh;
+    }
+
+    #imsakiyah-table th {
+        padding: 8px 4px;
+        font-size: 11px;
+    }
+
+    #imsakiyah-table td {
+        padding: 8px 4px;
+        font-size: 10px;
     }
 
 }

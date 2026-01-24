@@ -60,6 +60,29 @@
     <!-- Countdown Alert -->
     <div id="countdown-alert" class="countdown-notification"></div>
 
+    <!-- Ramadhan Countdown Display -->
+    <div id="ramadhan-countdown" class="ramadhan-countdown hidden">
+        <div class="countdown-label"></div>
+        <div class="countdown-time"></div>
+        <div class="countdown-subtext"></div>
+    </div>
+
+    <!-- Ramadhan Progress Indicator -->
+    <div id="ramadhan-progress" class="ramadhan-progress hidden">
+        <svg class="progress-circle" viewBox="0 0 120 120" width="120" height="120">
+            <circle class="progress-bg" cx="60" cy="60" r="54" fill="none" stroke="rgba(255,215,0,0.2)"
+                stroke-width="6" />
+            <circle class="progress-fill" cx="60" cy="60" r="54" fill="none" stroke="#fbbf24" stroke-width="6"
+                stroke-linecap="round" transform="rotate(-90 60 60)" />
+        </svg>
+        <div class="progress-text">
+            <div class="progress-day"></div>
+            <div class="progress-label">Ramadhan</div>
+        </div>
+        <div class="progress-eid"></div>
+    </div>
+
+
     <div class="waktu wow fadeIn" data-wow-delay="3s" id="prayer-times">
         <div id="left-times">
             <div id="imsak">IMSAK </div>
@@ -78,8 +101,14 @@
     <div id="countdown"></div>
 
     <!-- Calendar Toggle Button -->
-    <button id="calendar-toggle" class="calendar-toggle-btn wow fadeInUp" data-wow-delay="4s" title="Toggle Calendar">
+    <button id="calendar-toggle" class="calendar-toggle-btn wow fadeInUp" data-wow-delay="4s" title="Kalendar">
         📅
+    </button>
+
+    <!-- Imsakiyah Toggle Button -->
+    <button id="imsakiyah-toggle" class="imsakiyah-toggle-btn hidden wow fadeInUp" data-wow-delay="4.2s"
+        title="Jadwal Imsakiyah">
+        📖
     </button>
 
     <!-- Mini Calendar Widget -->
@@ -142,8 +171,34 @@
         </div>
     </div>
 
+    <!-- Imsakiyah Table Modal -->
+    <div id="imsakiyah-modal" class="imsakiyah-modal hidden">
+        <div class="modal-content">
+            <button class="modal-close">✕</button>
+            <h2>Jadwal Imsakiyah Ramadhan</h2>
+            <div id="imsakiyah-year-display" class="hijri-year-display"></div>
+            <div class="imsakiyah-table-container">
+                <table id="imsakiyah-table">
+                    <thead>
+                        <tr>
+                            <th>Hari</th>
+                            <th>Tanggal</th>
+                            <th>Imsak</th>
+                            <th>Berbuka</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <footer class="footer wow fadeInDown" data-wow-delay="4s">
         <p>بدر التمام إبن علي</p>
+        <!-- <p style="font-size: 12px; margin-top: 5px; opacity: 0.7; font-family: sans-serif;">Press 'R' key to toggle
+            Ramadhan Demo Mode 🌙</p> -->
     </footer>
 
     <script src="script.js"></script>
